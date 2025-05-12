@@ -1,7 +1,7 @@
 {
   "name": "etl-coding-assignment",
   "version": "1.0.0",
-  "description": "",
+  "description": "## The task",
   "main": "index.ts",
   "scripts": {
     "start": "bun src/index.ts"
@@ -9,8 +9,15 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {},
   "devDependencies": {
     "@types/node": "^20.14.10"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smitfire/etl-coding-assignment.git"
+  },
+  "bugs": {
+    "url": "https://github.com/smitfire/etl-coding-assignment/issues"
+  },
+  "homepage": "https://github.com/smitfire/etl-coding-assignment#readme"
 }
