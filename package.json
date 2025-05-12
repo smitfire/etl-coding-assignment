@@ -1,16 +1,24 @@
 {
   "name": "etl-coding-assignment",
   "version": "1.0.0",
-  "description": "## The task",
-  "main": "index.ts",
+  "description": "Data format translation program",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "bun src/index.ts"
+    "build": "tsc",
+    "test": "jest",
+    "start": "ts-node src/index.ts",
+    "dev": "ts-node-dev --respawn src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^20.14.10"
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.14.10",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   },
   "repository": {
     "type": "git",
@@ -19,5 +27,12 @@
   "bugs": {
     "url": "https://github.com/smitfire/etl-coding-assignment/issues"
   },
-  "homepage": "https://github.com/smitfire/etl-coding-assignment#readme"
+  "homepage": "https://github.com/smitfire/etl-coding-assignment#readme",
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "fixed-width-parser": "^3.0.0"
+  },
+  "bin": {
+    "data-translator": "./dist/index.js"
+  }
 }

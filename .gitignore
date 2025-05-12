@@ -1,1 +1,21 @@
-.qodo
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Test files
+*.json.txt
+*.html.txt
+
+# OS files
+.DS_Store
+.vscode/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage directory
+coverage/
