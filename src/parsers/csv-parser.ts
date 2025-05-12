@@ -16,6 +16,10 @@ export class CSVParser implements Parser {
   async parse(input: string): Promise<Record[]> {
     const results: Record[] = [];
     
+    if (!input || input.trim() === '') {
+      return results;
+    }
+    
     return new Promise((resolve, reject) => {
       // Create a readable stream from the input string
       const readableStream = Readable.from([input]);
@@ -24,20 +28,29 @@ export class CSVParser implements Parser {
         .pipe(csvParser())
         .on('data', (data: any) => {
           try {
-            // Transform and normalize the data
+            // Validate required fields before transformation
+            if (!data['Name'] || !data['Birthday'] || !data['Credit Limit']) {
+              console.error('Skipping record: Missing required fields');
+              return; // Skip this record
+            }
+            
+            // Try to transform the date first - if this fails, reject the entire record
+            const birthday = transformDate(data['Birthday'], 'DD/MM/YYYY');
+            
+            // If date transformation succeeds, proceed with creating the record
             const record: Record = {
               name: data['Name']?.trim() || '',
               address: data['Address']?.trim() || '',
               postcode: data['Postcode']?.trim() || '',
               phone: data['Phone']?.trim() || '',
-              creditLimit: transformNumber(data['Credit Limit'] || '0'),
-              birthday: transformDate(data['Birthday'] || '', 'DD/MM/YYYY')
+              creditLimit: transformNumber(data['Credit Limit']),
+              birthday: birthday
             };
             
             results.push(record);
           } catch (error) {
-            console.error('Error processing CSV row:', error);
-            // Continue processing other rows even if one fails
+            // Record is rejected - log error but continue processing other records
+            console.error('Rejecting record due to validation error:', error);
           }
         })
         .on('end', () => {

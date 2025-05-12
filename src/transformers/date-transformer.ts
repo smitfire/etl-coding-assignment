@@ -15,15 +15,27 @@ export function transformDate(dateStr: string, format: 'DD/MM/YYYY' | 'YYYYMMDD'
     let year: number;
 
     if (format === 'DD/MM/YYYY') {
-      // Parse date in format DD/MM/YYYY
-      const parts = dateStr.split('/');
-      if (parts.length !== 3) {
+      // Check format first - strict format checking before parsing
+      if (dateStr.includes('/')) {
+        // Standard DD/MM/YYYY format
+        const parts = dateStr.split('/');
+        if (parts.length !== 3) {
+          throw new Error(`Invalid date format, expected DD/MM/YYYY but got: ${dateStr}`);
+        }
+        
+        day = parseInt(parts[0], 10);
+        month = parseInt(parts[1], 10) - 1; // JavaScript months are 0-indexed
+        year = parseInt(parts[2], 10);
+      } else if (dateStr.includes('-')) {
+        // This is not the expected format, so throw an error
+        throw new Error(`Invalid date format, expected DD/MM/YYYY but got: ${dateStr}`);
+      } else if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        // This is not the expected format, so throw an error
+        throw new Error(`Invalid date format, expected DD/MM/YYYY but got: ${dateStr}`);
+      } else {
+        // No recognized separators, throw error
         throw new Error(`Invalid date format, expected DD/MM/YYYY but got: ${dateStr}`);
       }
-      
-      day = parseInt(parts[0], 10);
-      month = parseInt(parts[1], 10) - 1; // JavaScript months are 0-indexed
-      year = parseInt(parts[2], 10);
     } else if (format === 'YYYYMMDD') {
       // Parse date in format YYYYMMDD
       if (dateStr.length !== 8) {
@@ -35,6 +47,15 @@ export function transformDate(dateStr: string, format: 'DD/MM/YYYY' | 'YYYYMMDD'
       day = parseInt(dateStr.substring(6, 8), 10);
     } else {
       throw new Error(`Unsupported date format: ${format}`);
+    }
+
+    // Validate day, month ranges
+    if (day < 1 || day > 31) {
+      throw new Error(`Invalid day: ${day} in date ${dateStr}`);
+    }
+    
+    if (month < 0 || month > 11) {
+      throw new Error(`Invalid month: ${month + 1} in date ${dateStr}`);
     }
 
     // Create Date object and validate it
